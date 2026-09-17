@@ -1,11 +1,8 @@
 'use client';
 
-import Link from 'next/link';
-import {Check, LogIn, Plus, SendHorizontal} from 'lucide-react';
+import {Check, Plus, SendHorizontal} from 'lucide-react';
 
 import styles from './ChatPage.module.scss';
-
-const IS_AUTHORIZED = true;
 
 type ChatPreview = {
   id: number;
@@ -36,34 +33,6 @@ const chats: ChatPreview[] = [
 ];
 
 export function ChatPage() {
-  if (!IS_AUTHORIZED) {
-    return (
-        <section className={styles.unauthorized}>
-          <header className={styles.unauthorizedHeader}>
-            <h1>Чаты</h1>
-          </header>
-
-          <div className={styles.unauthorizedContent}>
-            <div className={styles.unauthorizedIcon}>
-              <LogIn size={36} />
-            </div>
-
-            <h2>Вы не авторизованы</h2>
-
-            <p>
-              Войдите в аккаунт GREEN-API, чтобы начать работу с чатами
-            </p>
-
-            <Link
-                className={styles.loginButton}
-                href="/connection"
-            >
-              Войти
-            </Link>
-          </div>
-        </section>
-    );
-  }
 
   return (
       <section className={styles.root}>

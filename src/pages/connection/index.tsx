@@ -2,13 +2,17 @@
 
 import {Button, Input} from 'antd';
 import {ChevronRight, LogIn, LogOut} from 'lucide-react';
+import {observer} from 'mobx-react-lite';
+import {useAuth} from '@/shared/auth';
 
 import styles from './ConnectionPage.module.scss';
 
-const IS_AUTHORIZED = true;
+export const ConnectionPage = observer(() => {
+    const authStore = useAuth();
 
-export function ConnectionPage() {
-  return (
+    const {isAuthorized} = authStore;
+
+    return (
       <section className={styles.root}>
         <aside className={styles.settings}>
           <h1>Настройки</h1>
@@ -17,13 +21,13 @@ export function ConnectionPage() {
               className={styles.settingsItem}
               type="button"
           >
-            {IS_AUTHORIZED ? (
+            {isAuthorized ? (
                 <LogOut size={24} />
             ) : (
                 <LogIn size={24} />
             )}
 
-            <span>{IS_AUTHORIZED ? 'Выход' : 'Вход'}</span>
+            <span>{isAuthorized ? 'Выход' : 'Вход'}</span>
 
             <ChevronRight
                 className={styles.chevron}
@@ -34,10 +38,10 @@ export function ConnectionPage() {
 
         <main className={styles.content}>
           <header className={styles.header}>
-            <h2>{IS_AUTHORIZED ? 'Выход' : 'Вход'}</h2>
+            <h2>{isAuthorized ? 'Выход' : 'Вход'}</h2>
           </header>
 
-          {IS_AUTHORIZED ? (
+          {isAuthorized ? (
               <div className={styles.authorizedState}>
                 <LogOut size={42} />
 
@@ -52,6 +56,7 @@ export function ConnectionPage() {
                     className={styles.logoutButton}
                     size="large"
                     danger
+                    onClick={() => authStore.logout()}
                 >
                   Выйти
                 </Button>
@@ -59,7 +64,10 @@ export function ConnectionPage() {
           ) : (
               <form
                   className={styles.form}
-                  onSubmit={(event) => event.preventDefault()}
+                  onSubmit={(event) => {
+                      event.preventDefault();
+                      authStore.login();
+                  }}
               >
                 <Input
                     name="idInstance"
@@ -86,4 +94,4 @@ export function ConnectionPage() {
         </main>
       </section>
   );
-}
+})
