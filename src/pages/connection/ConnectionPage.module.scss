@@ -1,0 +1,147 @@
+.authorizedState {
+  display: flex;
+  width: min(560px, calc(100% - 64px));
+  flex-direction: column;
+  align-items: center;
+  margin: 170px auto 0;
+  text-align: center;
+
+  svg {
+    color: #7b7f86;
+  }
+
+  h2 {
+    margin: 20px 0 8px;
+    font-size: 22px;
+  }
+
+  p {
+    max-width: 420px;
+    margin: 0;
+    color: #7b7f86;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+}
+
+.loginButton {
+  width: 180px;
+  align-self: center;
+}
+
+.logoutButton {
+  width: 180px;
+  margin-top: 28px;
+}
+
+.root {
+  display: grid;
+  height: 100%;
+  grid-template-columns: minmax(360px, 470px) 1fr;
+  overflow: hidden;
+  color: #111827;
+  background: #fff;
+}
+
+.settings {
+  padding: 24px 20px;
+  border-right: 1px solid #e5e7eb;
+  background: #fff;
+
+  h1 {
+    margin: 0 0 18px;
+    font-size: 27px;
+    font-weight: 700;
+  }
+}
+
+.settingsItem {
+  display: flex;
+  width: 100%;
+  height: 72px;
+  align-items: center;
+  gap: 16px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 14px;
+  color: #111827;
+  background: #eaf4ff;
+  font: inherit;
+  font-size: 17px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+
+  .chevron {
+    margin-left: auto;
+    color: #a3a8ae;
+  }
+}
+
+.content {
+  min-width: 0;
+  background: #f0f1f5;
+}
+
+.header {
+  display: flex;
+  height: 78px;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #e5e7eb;
+  background: #fff;
+
+  h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+  }
+}
+
+.form {
+  display: flex;
+  width: min(760px, calc(100% - 64px));
+  flex-direction: column;
+  gap: 24px;
+  margin: 170px auto 0;
+
+  :global(.ant-input),
+  :global(.ant-input-affix-wrapper) {
+    min-height: 62px;
+    border: 0;
+    border-radius: 18px;
+    box-shadow: none;
+    font-size: 16px;
+  }
+
+  :global(.ant-input-affix-wrapper .ant-input) {
+    min-height: auto;
+  }
+
+  :global(.ant-btn) {
+    height: 62px;
+    border-radius: 18px;
+    font-size: 17px;
+    font-weight: 600;
+  }
+}
+
+@media (max-width: 1050px) {
+  .root {
+    grid-template-columns: minmax(300px, 360px) 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .root {
+    grid-template-columns: 1fr;
+  }
+
+  .settings {
+    display: none;
+  }
+
+  .form {
+    margin-top: 80px;
+  }
+}

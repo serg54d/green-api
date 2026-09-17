@@ -1,0 +1,11 @@
+.root {
+  display: flex;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.content {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+}
