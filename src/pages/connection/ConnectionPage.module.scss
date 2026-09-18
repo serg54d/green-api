@@ -80,7 +80,42 @@
 
 .content {
   min-width: 0;
+  min-height: 0;
+  overflow-y: auto;
   background: #f0f1f5;
+}
+
+.error {
+  margin: 8px 0 0;
+  color: #b42318;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.connectionNotice {
+  padding: 12px 16px;
+  border: 1px solid #b4d4fa;
+  border-radius: 8px;
+  background: #edf5ff;
+  color: #253e5f;
+  font-size: 14px;
+  line-height: 1.5;
+
+  p {
+    margin: 0 0 8px;
+  }
+}
+
+.consoleLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #075ca8;
+  text-decoration: underline;
+
+  svg {
+    flex-shrink: 0;
+  }
 }
 
 .header {
