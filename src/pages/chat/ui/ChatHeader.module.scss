@@ -1,0 +1,59 @@
+.avatar {
+  display: grid;
+  width: 58px;
+  height: 58px;
+  flex: 0 0 58px;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.avatar_coral {
+  background: linear-gradient(145deg, #ff7a7a 0%, #ff616f 48%, #ef4658 100%);
+}
+
+.avatar_blue {
+  background: linear-gradient(145deg, #2298ff 0%, #0877ec 100%);
+}
+
+.conversationHeader {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  height: 78px;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 14px;
+  padding: 0 30px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #fff;
+
+  .avatar {
+    width: 48px;
+    height: 48px;
+    flex-basis: 48px;
+    font-size: 15px;
+  }
+}
+
+.contactInfo {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 3px;
+
+  strong {
+    overflow: hidden;
+    font-size: 17px;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  span {
+    color: #81868d;
+    font-size: 14px;
+  }
+}

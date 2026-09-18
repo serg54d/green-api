@@ -1,0 +1,47 @@
+.composer {
+  display: flex;
+  flex-shrink: 0;
+  align-self: center;
+  margin-bottom: 20px;
+  width: min(760px, calc(100% - 64px));
+  height: 58px;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #fff;
+
+  input {
+    min-width: 0;
+    height: 100%;
+    flex: 1;
+    padding: 0 8px 0 24px;
+    border: 0;
+    outline: 0;
+    color: #1f2937;
+    background: transparent;
+    font: inherit;
+    font-size: 16px;
+
+    &::placeholder {
+      color: #858a91;
+    }
+  }
+
+  button {
+    display: grid;
+    width: 46px;
+    height: 46px;
+    flex: 0 0 46px;
+    place-items: center;
+    margin-right: 6px;
+    border: 0;
+    border-radius: 50%;
+    color: #1685ee;
+    background: transparent;
+    cursor: pointer;
+
+    &:hover {
+      background: #edf6ff;
+    }
+  }
+}

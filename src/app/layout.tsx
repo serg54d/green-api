@@ -3,7 +3,7 @@ import type {ReactNode} from 'react';
 
 import AppLayout from './(init)/layout/AppLayout';
 import AntdConfigProviderWrapper from './(init)/providers/AntdConfigProviderWrapper';
-import AuthProvider from './(init)/providers/AuthProvider';
+import {AuthProvider} from '@/shared/auth';
 import NoSSR from './(init)/providers/NoSSR';
 
 import './(init)/styles/globals.scss';

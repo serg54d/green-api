@@ -2,7 +2,7 @@
 
 import {useContext} from 'react';
 
-import {AuthContext} from '@/app/(init)/providers/AuthProvider';
+import {AuthContext} from './AuthProvider';
 
 export function useAuth() {
     const authStore = useContext(AuthContext);
