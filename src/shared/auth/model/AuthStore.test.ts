@@ -1,14 +1,14 @@
-import {authApi} from '@/shared/api/green-api/authApi';
+import {authApi} from '../api/authApi';
 import {AuthStore} from './AuthStore';
 
-jest.mock('@/shared/api/green-api/authApi', () => ({authApi: {getStateInstance: jest.fn()}}));
+jest.mock('../api/authApi', () => ({authApi: {getStateInstance: jest.fn()}}));
 const request = jest.mocked(authApi.getStateInstance);
 const credentials = {idInstance: '123', apiTokenInstance: 'test-token'};
 
 describe('AuthStore', () => {
   beforeEach(() => request.mockReset());
 
-  it('starts disconnected, connects and clears credentials on logout', async () => {
+  it('изначально отключён, подключается и очищает реквизиты при выходе', async () => {
     request.mockResolvedValue({stateInstance: 'authorized'});
     const store = new AuthStore();
     expect(store.isAuthorized).toBe(false);
@@ -21,7 +21,7 @@ describe('AuthStore', () => {
   });
 
   it.each(['notAuthorized', 'starting', 'blocked', 'unexpected'])(
-    'rejects state %s',
+    'отклоняет подключение при состоянии %s',
     async (stateInstance) => {
       request.mockResolvedValue({stateInstance});
       const store = new AuthStore();
@@ -32,7 +32,7 @@ describe('AuthStore', () => {
     },
   );
 
-  it('handles failure and permits another attempt', async () => {
+  it('обрабатывает ошибку и позволяет повторить попытку', async () => {
     request.mockRejectedValueOnce(new Error('failure'));
     request.mockResolvedValueOnce({stateInstance: 'authorized'});
     const store = new AuthStore();
@@ -42,7 +42,7 @@ describe('AuthStore', () => {
     expect(store.error).toBeNull();
   });
 
-  it('ignores repeated clicks and late success after logout', async () => {
+  it('игнорирует повторные нажатия и поздний успешный ответ после выхода', async () => {
     let resolve!: (value: {stateInstance: string}) => void;
     request.mockImplementation(
       () =>
@@ -64,7 +64,7 @@ describe('AuthStore', () => {
     expect(store.credentials).toBeNull();
   });
 
-  it('does not overwrite a new connection with an old response', async () => {
+  it('не перезаписывает новое подключение устаревшим ответом', async () => {
     let reject!: (error: Error) => void;
     request.mockImplementationOnce(
       () =>

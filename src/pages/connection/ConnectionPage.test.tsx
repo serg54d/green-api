@@ -4,20 +4,35 @@ import userEvent from '@testing-library/user-event';
 import {AuthProvider} from '@/shared/auth';
 
 import {ConnectionPage} from './index';
-import {authApi} from '@/shared/api/green-api/authApi';
+import {authApi} from '@/shared/auth/api/authApi';
 
 const mockReplace = jest.fn();
 jest.mock('next/navigation', () => ({useRouter: () => ({replace: mockReplace})}));
-jest.mock('@/shared/api/green-api/authApi', () => ({authApi: {getStateInstance: jest.fn()}}));
+jest.mock('@/shared/auth/api/authApi', () => ({authApi: {getStateInstance: jest.fn()}}));
 const mockGetState = jest.mocked(authApi.getStateInstance);
 
 describe('ConnectionPage', () => {
+  it('открывает пункт настроек и возвращается назад без потери введённых данных', async () => {
+    const user = userEvent.setup();
+    const {container} = render(<ConnectionPage />, {wrapper: AuthProvider});
+    const root = container.firstElementChild;
+    expect(root).not.toHaveClass('mobileContentOpen');
+    await user.click(screen.getByRole('button', {name: 'Вход'}));
+    expect(root).toHaveClass('mobileContentOpen');
+    await user.type(screen.getByPlaceholderText('idInstance'), '123');
+    await user.click(screen.getByRole('button', {name: 'Назад к настройкам'}));
+    expect(root).not.toHaveClass('mobileContentOpen');
+    await user.click(screen.getByRole('button', {name: 'Вход'}));
+    expect(screen.getByPlaceholderText('idInstance')).toHaveValue('123');
+    expect(mockGetState).not.toHaveBeenCalled();
+  });
+
   beforeEach(() => {
     mockReplace.mockReset();
     mockGetState.mockReset();
     mockGetState.mockResolvedValue({stateInstance: 'authorized'});
   });
-  it('renders the page', () => {
+  it('отображает страницу подключения', () => {
     render(<ConnectionPage />, {wrapper: AuthProvider});
 
     expect(screen.getByRole('heading', {name: 'Настройки', level: 1})).toBeInTheDocument();
@@ -25,7 +40,7 @@ describe('ConnectionPage', () => {
     expect(screen.getByPlaceholderText('apiTokenInstance')).toBeInTheDocument();
   });
 
-  it('updates the page on connect and logout through the shared provider', async () => {
+  it('обновляет страницу при подключении и выходе через общий провайдер', async () => {
     const user = userEvent.setup();
     render(<ConnectionPage />, {wrapper: AuthProvider});
 
@@ -45,7 +60,7 @@ describe('ConnectionPage', () => {
     expect(screen.getByPlaceholderText('apiTokenInstance')).toHaveValue('');
   });
 
-  it('validates fields before calling the API', async () => {
+  it('проверяет поля перед вызовом API', async () => {
     const user = userEvent.setup();
     render(<ConnectionPage />, {wrapper: AuthProvider});
     await user.click(screen.getByRole('button', {name: 'Войти'}));
@@ -54,7 +69,7 @@ describe('ConnectionPage', () => {
     expect(mockGetState).not.toHaveBeenCalled();
   });
 
-  it('offers the console for an unauthorized instance and allows retrying', async () => {
+  it('предлагает личный кабинет для неавторизованного инстанса и позволяет повторить подключение', async () => {
     mockGetState.mockResolvedValue({stateInstance: 'notAuthorized'});
     const user = userEvent.setup();
     render(<ConnectionPage />, {wrapper: AuthProvider});
@@ -79,7 +94,7 @@ describe('ConnectionPage', () => {
   });
 
   it.each(['starting', 'blocked', 'network', 'invalid-token'])(
-    'does not offer instance authorization for %s',
+    'не предлагает авторизацию инстанса при ошибке %s',
     async (reason) => {
       if (reason === 'network') mockGetState.mockRejectedValue(new Error('Network error'));
       else if (reason === 'invalid-token') {

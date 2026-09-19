@@ -1,5 +1,5 @@
 import {makeAutoObservable, observable, runInAction} from 'mobx';
-import {authApi} from '@/shared/api/green-api/authApi';
+import {authApi} from '../api/authApi';
 import {getConnectionErrorMessage, getInstanceStateMessage} from '@/shared/api/green-api/errors';
 import type {Credentials} from '@/shared/api/green-api/types';
 

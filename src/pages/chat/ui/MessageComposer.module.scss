@@ -27,6 +27,12 @@
     }
   }
 
+  input:disabled {
+    cursor: not-allowed;
+  }
+
+
+
   button {
     display: grid;
     width: 46px;
@@ -40,8 +46,15 @@
     background: transparent;
     cursor: pointer;
 
+
+
     &:hover {
       background: #edf6ff;
     }
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
   }
 }

@@ -2,12 +2,12 @@ import {render, screen, within} from '@testing-library/react';
 import {MessageList} from './MessageList';
 
 describe('MessageList', () => {
-  it('renders messages in the supplied order', () => {
+  it('отображает сообщения в переданном порядке', () => {
     render(
       <MessageList
         messages={[
-          {id: 1, text: 'First message', time: '20:55'},
-          {id: 2, text: 'Second message', time: '20:56'},
+          {id: '1', text: 'First message', time: '20:55', direction: 'incoming'},
+          {id: '2', text: 'Second message', time: '20:56', direction: 'outgoing'},
         ]}
       />,
     );
@@ -19,8 +19,8 @@ describe('MessageList', () => {
     expect(log.children[1]).toHaveTextContent('Second message');
   });
 
-  it('does not render mock messages for an empty conversation', () => {
+  it('показывает пустое состояние без выдуманных сообщений', () => {
     render(<MessageList messages={[]} />);
-    expect(screen.getByRole('log')).toBeEmptyDOMElement();
+    expect(screen.getByRole('log')).toHaveTextContent('Нет сообщений');
   });
 });

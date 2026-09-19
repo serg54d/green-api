@@ -1,8 +1,8 @@
 import {getConnectionErrorMessage} from './errors';
 
-describe('connection errors', () => {
+describe('Ошибки подключения', () => {
   it.each([new Error('secret-token'), new TypeError('secret-token'), null])(
-    'uses a safe fallback for a non-Axios error: %p',
+    'возвращает безопасный текст для ошибки не из Axios: %p',
     error => {
       expect(getConnectionErrorMessage(error)).toBe(
         'Не удалось проверить подключение. Попробуйте ещё раз.',
@@ -15,7 +15,7 @@ describe('connection errors', () => {
     [403, 'подтвердить доступ'],
     [429, 'Слишком много запросов'],
     [500, 'GREEN-API вернул ошибку'],
-  ])('handles HTTP %s without leaking response details', (status, message) => {
+  ])('обрабатывает HTTP %s без раскрытия содержимого ответа', (status, message) => {
     const result = getConnectionErrorMessage({
       isAxiosError: true,
       response: {status, data: 'secret-token'},
@@ -25,7 +25,7 @@ describe('connection errors', () => {
     expect(result).not.toContain('secret-token');
   });
 
-  it('distinguishes timeout and network failure', () => {
+  it('различает таймаут и ошибку сети', () => {
     expect(getConnectionErrorMessage({isAxiosError: true, code: 'ECONNABORTED'})).toContain(
       'вовремя',
     );

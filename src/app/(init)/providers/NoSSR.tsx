@@ -7,5 +7,9 @@ const NoSSR = ({children}: {children: ReactNode}) => <>{children}</>;
 
 export default dynamic(() => Promise.resolve(NoSSR), {
   ssr: false,
-  loading: () => <div role="status" aria-label="Loading" className="app-loading" />,
+  loading: () => (
+    <div role="status" aria-label="Загрузка" className="app-loading-container">
+      <div className="app-loading" aria-hidden="true" />
+    </div>
+  ),
 });

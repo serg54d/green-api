@@ -1,5 +1,9 @@
-import {greenApiClient} from './client';
-import type {Credentials, GetStateInstanceResponse} from './types';
+import {greenApiClient} from '@/shared/api/green-api/client';
+import type {Credentials} from '@/shared/api/green-api/types';
+
+export interface GetStateInstanceResponse {
+  stateInstance: string;
+}
 
 export const authApi = {
   async getStateInstance(

@@ -7,17 +7,17 @@ describe('greenApiUrl', () => {
     else process.env.NEXT_PUBLIC_GREEN_API_URL = original;
   });
 
-  it('requires a configured URL', () => {
+  it('требует указать URL', () => {
     delete process.env.NEXT_PUBLIC_GREEN_API_URL;
     expect(() => env.greenApiUrl).toThrow('GREEN_API_URL_MISSING');
   });
 
-  it('requires HTTPS', () => {
+  it('требует протокол HTTPS', () => {
     process.env.NEXT_PUBLIC_GREEN_API_URL = 'http://example.com';
     expect(() => env.greenApiUrl).toThrow('GREEN_API_URL_HTTPS_REQUIRED');
   });
 
-  it('preserves the configured HTTPS URL', () => {
+  it('сохраняет заданный HTTPS URL', () => {
     process.env.NEXT_PUBLIC_GREEN_API_URL = 'https://3100.api.green-api.com/';
     expect(env.greenApiUrl).toBe('https://3100.api.green-api.com/');
   });

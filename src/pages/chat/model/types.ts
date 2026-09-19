@@ -1,14 +1,12 @@
-export type ChatPreview = {
-  id: number;
-  name: string;
-  message: string;
-  time: string;
-  initials: string;
-  tone: 'coral' | 'blue';
-};
-
 export interface ChatMessage {
-  id: number;
+  id: string;
   text: string;
   time: string;
+  direction: 'incoming' | 'outgoing';
+}
+
+export interface Chat {
+  id: string;
+  phoneNumber: string;
+  messages: ChatMessage[];
 }

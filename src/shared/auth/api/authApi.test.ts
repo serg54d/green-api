@@ -1,7 +1,7 @@
-import {greenApiClient} from './client';
+import {greenApiClient} from '@/shared/api/green-api/client';
 import {authApi} from './authApi';
 
-jest.mock('./client', () => ({greenApiClient: {get: jest.fn()}}));
+jest.mock('@/shared/api/green-api/client', () => ({greenApiClient: {get: jest.fn()}}));
 const get = jest.mocked(greenApiClient.get);
 
 describe('authApi.getStateInstance', () => {
@@ -9,7 +9,7 @@ describe('authApi.getStateInstance', () => {
     get.mockReset();
   });
 
-  it('sends credentials in the path and passes the abort signal', async () => {
+  it('передаёт реквизиты в пути запроса и сигнал отмены', async () => {
     get.mockResolvedValue({data: {stateInstance: 'authorized'}});
     const controller = new AbortController();
     await expect(
@@ -23,7 +23,7 @@ describe('authApi.getStateInstance', () => {
     });
   });
 
-  it('passes request errors to the caller', async () => {
+  it('передаёт ошибку запроса вызывающему коду', async () => {
     const error = new Error('Request failed');
     get.mockRejectedValue(error);
     await expect(

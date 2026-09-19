@@ -1,7 +1,8 @@
 'use client';
 
 import {Button, Input} from 'antd';
-import {ChevronRight, ExternalLink, LogIn, LogOut} from 'lucide-react';
+import {ArrowLeft, ChevronRight, ExternalLink, LogIn, LogOut} from 'lucide-react';
+import {useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useRouter} from 'next/navigation';
 import {Controller, useForm} from 'react-hook-form';
@@ -14,6 +15,7 @@ import styles from './ConnectionPage.module.scss';
 export const ConnectionPage = observer(() => {
   const authStore = useAuth();
   const router = useRouter();
+  const [isMobileContentOpen, setIsMobileContentOpen] = useState(false);
   const {
     control,
     handleSubmit,
@@ -40,11 +42,11 @@ export const ConnectionPage = observer(() => {
   const needsInstanceAuthorization = authStore.instanceState === 'notAuthorized';
 
   return (
-    <section className={styles.root}>
+    <section className={`${styles.root} ${isMobileContentOpen ? styles.mobileContentOpen : ''}`}>
       <aside className={styles.settings}>
         <h1>Настройки</h1>
 
-        <button className={styles.settingsItem} type="button">
+        <button className={styles.settingsItem} type="button" onClick={() => setIsMobileContentOpen(true)}>
           {isAuthorized ? <LogOut size={24} /> : <LogIn size={24} />}
 
           <span>{isAuthorized ? 'Выход' : 'Вход'}</span>
@@ -55,6 +57,15 @@ export const ConnectionPage = observer(() => {
 
       <main className={styles.content}>
         <header className={styles.header}>
+          <button
+            className={styles.backButton}
+            type="button"
+            aria-label="Назад к настройкам"
+            title="Назад к настройкам"
+            onClick={() => setIsMobileContentOpen(false)}
+          >
+            <ArrowLeft size={24} />
+          </button>
           <h2>{isAuthorized ? 'Выход' : 'Вход'}</h2>
         </header>
 

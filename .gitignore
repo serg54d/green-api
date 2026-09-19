@@ -10,6 +10,8 @@ coverage/
 !.env.example
 *.tsbuildinfo
 npm-debug.log*
+.next-dev-output.log
+.next-dev-error.log
 .DS_Store
 Thumbs.db
 AGENTS.md

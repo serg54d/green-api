@@ -1,15 +1,32 @@
-import type {ChatPreview} from '../model/types';
+import {ArrowLeft, UserRound} from 'lucide-react';
+
+import {formatPhoneNumber} from '@/shared/lib/phone';
+import type {Chat} from '../model/types';
+
 import styles from './ChatHeader.module.scss';
 
-export function ChatHeader({chat}: {chat: ChatPreview}) {
-  return (
-    <header className={styles.conversationHeader}>
-      <span className={`${styles.avatar} ${styles[`avatar_${chat.tone}`]}`}>{chat.initials}</span>
+type Props = {
+    chat: Chat;
+    onBack: () => void;
+};
 
-      <div className={styles.contactInfo}>
-        <strong>{chat.name}</strong>
-        <span>Был(а) недавно</span>
-      </div>
-    </header>
-  );
+export function ChatHeader({chat, onBack}: Props) {
+    return (
+        <header className={styles.conversationHeader}>
+            <button
+                className={styles.backButton}
+                type="button"
+                aria-label="Назад к чатам"
+                onClick={onBack}
+            >
+                <ArrowLeft size={24} />
+            </button>
+
+            <span className={styles.avatar}>
+        <UserRound size={22} />
+      </span>
+
+            <strong>{formatPhoneNumber(chat.phoneNumber)}</strong>
+        </header>
+    );
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import {createContext, type ReactNode, useRef, useEffect} from 'react';
+import {createContext, type ReactNode, useState, useEffect} from 'react';
 
 import {AuthStore} from './model/AuthStore';
 
@@ -11,16 +11,11 @@ type Props = {
 };
 
 export function AuthProvider({children}: Props) {
-  const authStoreRef = useRef<AuthStore | null>(null);
-
-  if (!authStoreRef.current) {
-    authStoreRef.current = new AuthStore();
-  }
+  const [authStore] = useState(() => new AuthStore());
 
   useEffect(() => {
-    const store = authStoreRef.current;
-    return () => store?.logout();
-  }, []);
+    return () => authStore.logout();
+  }, [authStore]);
 
-  return <AuthContext.Provider value={authStoreRef.current}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={authStore}>{children}</AuthContext.Provider>;
 }

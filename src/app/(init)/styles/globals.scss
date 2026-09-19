@@ -15,10 +15,15 @@ body {
   letter-spacing: 0;
 }
 
+.app-loading-container {
+  display: grid;
+  min-height: 100dvh;
+  place-items: center;
+}
+
 .app-loading {
   width: 24px;
   height: 24px;
-  margin: 24px;
   border: 2px solid #e4e4e7;
   border-top-color: #1677ff;
   border-radius: 50%;

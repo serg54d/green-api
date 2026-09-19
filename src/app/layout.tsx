@@ -4,6 +4,7 @@ import type {ReactNode} from 'react';
 import AppLayout from './(init)/layout/AppLayout';
 import AntdConfigProviderWrapper from './(init)/providers/AntdConfigProviderWrapper';
 import {AuthProvider} from '@/shared/auth';
+import {ChatProvider} from './(init)/providers/ChatProvider';
 import NoSSR from './(init)/providers/NoSSR';
 
 import './(init)/styles/globals.scss';
@@ -24,9 +25,11 @@ export default function RootLayout({
       <NoSSR>
         <AntdConfigProviderWrapper>
           <AuthProvider>
+              <ChatProvider>
             <AppLayout>
               {children}
             </AppLayout>
+              </ChatProvider>
           </AuthProvider>
         </AntdConfigProviderWrapper>
       </NoSSR>

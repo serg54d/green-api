@@ -5,7 +5,7 @@ jest.mock('@/shared/config/env', () => ({
 }));
 
 describe('greenApiClient', () => {
-  it('configures the base URL and timeout once for all requests', () => {
+  it('задаёт общий базовый URL и таймаут для запросов', () => {
     expect(greenApiClient.defaults.baseURL).toBe('https://3100.api.green-api.com');
     expect(greenApiClient.defaults.timeout).toBe(20_000);
     expect(greenApiClient.getUri({url: '/waInstance123/getStateInstance/token'})).toBe(
