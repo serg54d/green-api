@@ -10,36 +10,31 @@ import {useAuth} from '@/shared/auth';
 import styles from './AuthGuard.module.scss';
 
 type Props = {
-    children: ReactNode;
+  children: ReactNode;
 };
 
 const AuthGuard = observer(({children}: Props) => {
-    const authStore = useAuth();
+  const authStore = useAuth();
 
-    if (authStore.isAuthorized) {
-        return <>{children}</>;
-    }
+  if (authStore.isAuthorized) {
+    return <>{children}</>;
+  }
 
-    return (
-        <div className={styles.root}>
-            <div className={styles.icon}>
-                <LogIn size={36} />
-            </div>
+  return (
+    <div className={styles.root}>
+      <div className={styles.icon}>
+        <LogIn size={36} />
+      </div>
 
-            <h2>Вы не авторизованы</h2>
+      <h2>Вы не авторизованы</h2>
 
-            <p>
-                Войдите в GREEN-API, чтобы начать работу с чатами
-            </p>
+      <p>Войдите в GREEN-API, чтобы начать работу с чатами</p>
 
-            <Link
-                className={styles.button}
-                href="/connection"
-            >
-                Войти
-            </Link>
-        </div>
-    );
+      <Link className={styles.button} href="/connection">
+        Войти
+      </Link>
+    </div>
+  );
 });
 
 export default AuthGuard;

@@ -6,8 +6,6 @@
   min-height: 0;
   padding: 16px clamp(28px, 7vw, 110px);
   overflow-y: auto;
-
-
 }
 
 .messageBubble {
@@ -37,7 +35,6 @@
 
 .messageTime {
   flex-shrink: 0;
-  margin-left: auto;
   color: #2284d8;
   font-size: 12px;
 }
@@ -59,4 +56,41 @@
 .outgoing {
   align-self: flex-end;
   border-radius: 20px 20px 5px 20px;
+}
+
+.messageMeta {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 6px;
+  margin-left: 8px;
+}
+
+.status {
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.status_sending {
+  color: #7b7f86;
+}
+
+.status_queued {
+  color: #1685ee;
+}
+
+.status_delivered {
+  color: #1685ee;
+}
+
+.status_read {
+  color: #1685ee;
+}
+
+.status_error {
+  color: #d9363e;
+}
+
+.status_unknown {
+  color: #ad6800;
 }

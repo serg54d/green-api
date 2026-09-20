@@ -58,7 +58,7 @@ describe('ChatPage', () => {
     await user.click(screen.getByRole('button', {name: 'Добавить'}));
     await waitFor(() => expect(store.activeChatId).toBe('1'));
     expect(screen.getByRole('log')).toHaveTextContent('Нет сообщений');
-    expect(screen.getByLabelText('Сообщение')).toBeDisabled();
+    expect(screen.getByLabelText('Сообщение')).toBeEnabled();
     expect(screen.getByRole('button', {name: 'Отправить сообщение'})).toBeDisabled();
   });
 

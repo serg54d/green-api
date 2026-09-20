@@ -20,7 +20,16 @@ export function ChatProvider({children}: Props) {
   useEffect(() => {
     const stopWatchingCredentials = reaction(
       () => authStore.credentials,
-      () => chatStore.reset(),
+      (credentials) => {
+        chatStore.reset();
+
+        if (credentials) {
+          chatStore.startPolling();
+        }
+      },
+      {
+        fireImmediately: true,
+      },
     );
 
     return () => {

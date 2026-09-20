@@ -7,30 +7,30 @@ import type {NavMenuItem} from '../const';
 import styles from './Sidebar.module.scss';
 
 type Props = {
-    items: NavMenuItem[];
+  items: NavMenuItem[];
 };
 
 export default function NavMenu({items}: Props) {
-    const pathname = usePathname();
+  const pathname = usePathname();
 
-    return (
-        <nav className={styles.nav}>
-            {items.map((item) => {
-                const Icon = item.icon;
-                const isActive = pathname === item.key;
+  return (
+    <nav className={styles.nav}>
+      {items.map((item) => {
+        const Icon = item.icon;
+        const isActive = pathname === item.key;
 
-                return (
-                    <Link
-                        key={item.key}
-                        href={item.key}
-                        className={`${styles.item} ${isActive ? styles.itemActive : ''}`}
-                        aria-current={isActive ? 'page' : undefined}
-                    >
-                        <Icon size={24} strokeWidth={2.2} />
-                        <span>{item.label}</span>
-                    </Link>
-                );
-            })}
-        </nav>
-    );
+        return (
+          <Link
+            key={item.key}
+            href={item.key}
+            className={`${styles.item} ${isActive ? styles.itemActive : ''}`}
+            aria-current={isActive ? 'page' : undefined}
+          >
+            <Icon size={24} strokeWidth={2.2} />
+            <span>{item.label}</span>
+          </Link>
+        );
+      })}
+    </nav>
+  );
 }

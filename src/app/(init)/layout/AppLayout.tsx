@@ -5,10 +5,10 @@ import styles from './AppLayout.module.scss';
 
 export default function AppLayout({children}: {children: ReactNode}) {
   return (
-      <div className={styles.root}>
-        <Sidebar />
+    <div className={styles.root}>
+      <Sidebar />
 
-        <main className={styles.content}>{children}</main>
-      </div>
+      <main className={styles.content}>{children}</main>
+    </div>
   );
 }

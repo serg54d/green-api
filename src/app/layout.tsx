@@ -14,26 +14,20 @@ export const metadata: Metadata = {
   description: 'MAX messaging client powered by GREEN-API',
 };
 
-export default function RootLayout({
-                                     children,
-                                   }: {
-  children: ReactNode;
-}) {
+export default function RootLayout({children}: {children: ReactNode}) {
   return (
-      <html lang="ru">
+    <html lang="ru">
       <body>
-      <NoSSR>
-        <AntdConfigProviderWrapper>
-          <AuthProvider>
+        <NoSSR>
+          <AntdConfigProviderWrapper>
+            <AuthProvider>
               <ChatProvider>
-            <AppLayout>
-              {children}
-            </AppLayout>
+                <AppLayout>{children}</AppLayout>
               </ChatProvider>
-          </AuthProvider>
-        </AntdConfigProviderWrapper>
-      </NoSSR>
+            </AuthProvider>
+          </AntdConfigProviderWrapper>
+        </NoSSR>
       </body>
-      </html>
+    </html>
   );
 }

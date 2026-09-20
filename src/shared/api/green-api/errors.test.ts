@@ -3,7 +3,7 @@ import {getConnectionErrorMessage} from './errors';
 describe('Ошибки подключения', () => {
   it.each([new Error('secret-token'), new TypeError('secret-token'), null])(
     'возвращает безопасный текст для ошибки не из Axios: %p',
-    error => {
+    (error) => {
       expect(getConnectionErrorMessage(error)).toBe(
         'Не удалось проверить подключение. Попробуйте ещё раз.',
       );

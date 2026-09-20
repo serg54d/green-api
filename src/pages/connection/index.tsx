@@ -46,7 +46,11 @@ export const ConnectionPage = observer(() => {
       <aside className={styles.settings}>
         <h1>Настройки</h1>
 
-        <button className={styles.settingsItem} type="button" onClick={() => setIsMobileContentOpen(true)}>
+        <button
+          className={styles.settingsItem}
+          type="button"
+          onClick={() => setIsMobileContentOpen(true)}
+        >
           {isAuthorized ? <LogOut size={24} /> : <LogIn size={24} />}
 
           <span>{isAuthorized ? 'Выход' : 'Вход'}</span>
