@@ -1,5 +1,11 @@
 import axios from 'axios';
 
+export function isConnectionAccessError(error: unknown): boolean {
+  return (
+    axios.isAxiosError(error) && (error.response?.status === 401 || error.response?.status === 403)
+  );
+}
+
 export type SendMessageFailure = {
   status: 'error' | 'unknown';
   message: string;

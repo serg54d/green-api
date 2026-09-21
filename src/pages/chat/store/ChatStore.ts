@@ -4,7 +4,7 @@ import type {NotificationBody, OutgoingMessageStatus} from '../api/chatApi';
 
 import {chatApi} from '../api/chatApi';
 import type {Credentials} from '@shared/api/green-api/types';
-import {getSendMessageFailure} from '../api/errors';
+import {getSendMessageFailure, isConnectionAccessError} from '../api/errors';
 
 import {normalizePhoneNumber} from '@/shared/lib/phone';
 import {isSupportedPhoneNumber} from '../model/phone';
@@ -95,6 +95,29 @@ export class ChatStore {
   stopPolling() {
     this.pollingController?.abort();
     this.pollingController = null;
+  }
+
+  private stopPollingOnAccessError() {
+    this.stopPolling();
+    this.notificationSettingsWarning = null;
+    this.pollingError =
+      'GREEN-API отклонил доступ. Обновления остановлены. Проверьте ID инстанса, токен и адрес API, затем выйдите и подключитесь заново.';
+  }
+
+  private waitForRetry(milliseconds: number, signal: AbortSignal): Promise<void> {
+    return new Promise((resolve) => {
+      if (signal.aborted) {
+        resolve();
+        return;
+      }
+      const finish = () => {
+        clearTimeout(timer);
+        signal.removeEventListener('abort', finish);
+        resolve();
+      };
+      const timer = setTimeout(finish, milliseconds);
+      signal.addEventListener('abort', finish, {once: true});
+    });
   }
 
   get activeChat(): Chat | null {
@@ -339,8 +362,13 @@ export class ChatStore {
         runInAction(() => {
           this.pollingError = null;
         });
-      } catch {
+      } catch (error) {
         if (this.pollingController !== controller || controller.signal.aborted) {
+          return;
+        }
+
+        if (isConnectionAccessError(error)) {
+          this.stopPollingOnAccessError();
           return;
         }
 
@@ -353,9 +381,7 @@ export class ChatStore {
           });
         }
 
-        await new Promise((resolve) => {
-          setTimeout(resolve, 1500);
-        });
+        await this.waitForRetry(1500, controller.signal);
       }
     }
   }
@@ -400,8 +426,13 @@ export class ChatStore {
       });
 
       return issues.length === 0;
-    } catch {
+    } catch (error) {
       if (this.pollingController !== controller || controller.signal.aborted) {
+        return false;
+      }
+
+      if (isConnectionAccessError(error)) {
+        this.stopPollingOnAccessError();
         return false;
       }
 
@@ -417,13 +448,11 @@ export class ChatStore {
     while (this.pollingController === controller && !controller.signal.aborted) {
       const isValid = await this.checkNotificationSettings(credentials, controller);
 
-      if (isValid) {
+      if (isValid || this.pollingController !== controller || controller.signal.aborted) {
         return;
       }
 
-      await new Promise((resolve) => {
-        setTimeout(resolve, 15000);
-      });
+      await this.waitForRetry(15000, controller.signal);
     }
   }
 

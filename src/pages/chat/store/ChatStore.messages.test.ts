@@ -53,6 +53,72 @@ describe('Отправка и очередь уведомлений', () => {
     jest.useRealTimers();
   });
 
+  it.each([
+    ['receiveNotification', 401],
+    ['receiveNotification', 403],
+    ['deleteNotification', 401],
+    ['deleteNotification', 403],
+    ['getSettings', 401],
+    ['getSettings', 403],
+  ] as const)('останавливает оба цикла после %s с HTTP %s', async (method, status) => {
+    jest.useFakeTimers();
+    if (method === 'deleteNotification') {
+      jest
+        .mocked(chatApi.receiveNotification)
+        .mockResolvedValueOnce({receiptId: 1, body: incoming});
+    }
+    jest.mocked(chatApi[method]).mockRejectedValueOnce({isAxiosError: true, response: {status}});
+    store.startPolling();
+    await jest.advanceTimersByTimeAsync(60000);
+    expect(chatApi.receiveNotification).toHaveBeenCalledTimes(1);
+    expect(chatApi.getSettings).toHaveBeenCalledTimes(1);
+    expect(jest.mocked(chatApi.receiveNotification).mock.calls[0][1]?.aborted).toBe(true);
+    expect(store.pollingError).toContain('выйдите и подключитесь заново');
+    expect(store.chats).toHaveLength(1);
+    expect(jest.getTimerCount()).toBe(0);
+  });
+
+  it.each([429, 500, 502])('повторяет polling после временной HTTP ошибки %s', async (status) => {
+    jest.useFakeTimers();
+    jest
+      .mocked(chatApi.receiveNotification)
+      .mockRejectedValueOnce({isAxiosError: true, response: {status}})
+      .mockResolvedValueOnce({receiptId: 1, body: incoming});
+    store.startPolling();
+    await jest.advanceTimersByTimeAsync(1500);
+    expect(store.activeChat?.messages[0].text).toBe('Привет');
+    expect(store.pollingError).toBeNull();
+  });
+
+  it('отменяет ожидание повторных запросов при выходе', async () => {
+    jest.useFakeTimers();
+    jest.mocked(chatApi.receiveNotification).mockRejectedValueOnce(new Error('Network error'));
+    jest.mocked(chatApi.getSettings).mockRejectedValueOnce(new Error('Network error'));
+    store.startPolling();
+    await jest.advanceTimersByTimeAsync(0);
+    expect(jest.getTimerCount()).toBe(2);
+    store.reset();
+    expect(jest.getTimerCount()).toBe(0);
+    await jest.advanceTimersByTimeAsync(60000);
+    expect(chatApi.receiveNotification).toHaveBeenCalledTimes(1);
+    expect(chatApi.getSettings).toHaveBeenCalledTimes(1);
+  });
+
+  it('не запускает второй цикл и игнорирует отказ от старого подключения', async () => {
+    const oldResponse = deferred<ReceiveNotificationResponse | null>();
+    jest.mocked(chatApi.receiveNotification).mockReturnValueOnce(oldResponse.promise);
+    store.startPolling();
+    store.startPolling();
+    expect(chatApi.receiveNotification).toHaveBeenCalledTimes(1);
+    store.reset();
+    store.startPolling();
+    oldResponse.resolve({receiptId: 1, body: incoming});
+    await Promise.resolve();
+    expect(chatApi.receiveNotification).toHaveBeenCalledTimes(2);
+    expect(chatApi.deleteNotification).not.toHaveBeenCalled();
+    expect(store.pollingError).toBeNull();
+  });
+
   it('показывает отправку, очищает черновик и сохраняет id без ложного статуса доставки', async () => {
     const response = deferred<{idMessage: string}>();
     jest.mocked(chatApi.sendMessage).mockReturnValue(response.promise);
